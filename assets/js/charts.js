@@ -158,7 +158,11 @@ export function colunas(el, cols, { cor = 'var(--series-1)', onClick, altura = 2
           </div>`
         )
         .join('')}</div>
-      <div class="col-eixo" aria-hidden="true">${cols.map((c) => `<span title="${esc(c.rotuloLongo || c.rotulo)}">${esc(c.rotulo)}</span>`).join('')}</div>
+      <div class="col-eixo" aria-hidden="true">${cols
+        .map(
+          (c) => `<span title="${esc(c.rotuloLongo || c.rotulo)}"><span class="longo">${esc(c.rotulo)}</span><span class="curto">${esc(c.rotuloCurto || c.rotulo)}</span></span>`
+        )
+        .join('')}</div>
     </div>${tabela(['Período', 'Quantidade'], cols.map((c) => [c.rotuloLongo || c.rotulo, fmtNum(c.valor)]))}`;
 
   el.querySelectorAll('.col-item').forEach((item) => {

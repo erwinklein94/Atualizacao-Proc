@@ -27,6 +27,7 @@ const state = {
   docsFiltro: { ...FILTRO_DOCS_PADRAO },
   limite: 50,
   venc: { tipo: '' },
+  rotaAtual: null,
   recuperandoSenha: veioDeRecuperacao,
 };
 
@@ -148,6 +149,8 @@ function rotear() {
     else a.removeAttribute('aria-current');
   });
   document.title = `${ROTAS[rota].titulo} · Procedimentos Rumo`;
+  if (rota !== state.rotaAtual) window.scrollTo({ top: 0 });
+  state.rotaAtual = rota;
   ROTAS[rota].view(new URLSearchParams(qs || ''));
 }
 
@@ -402,6 +405,7 @@ function viewPainel() {
     const docsMes = ctrl.filter((d) => d._venc && d._dias >= 0 && d._venc.getFullYear() === dt.getFullYear() && d._venc.getMonth() === dt.getMonth());
     meses.push({
       rotulo: `${MESES[dt.getMonth()]}/${String(dt.getFullYear()).slice(2)}`,
+      rotuloCurto: MESES[dt.getMonth()].charAt(0).toUpperCase(),
       rotuloLongo: `${MESES_LONGOS[dt.getMonth()]} de ${dt.getFullYear()}`,
       valor: docsMes.length,
       mes: `${dt.getFullYear()}-${pad2(dt.getMonth() + 1)}`,
@@ -413,7 +417,7 @@ function viewPainel() {
   const listaVencidos = ctrl.filter((d) => d._sit === 'Vencido' && d._venc).sort((a, b) => a._dias - b._dias).slice(0, 6);
   $('#l-vencidos').innerHTML = listaVencidos.length
     ? listaVencidos.map((d) => itemCompacto(d)).join('')
-    : '<li class="muted">Nenhum documento vencido. 👏</li>';
+    : '<li class="muted">Nenhum documento vencido.</li>';
   const listaProximos = ctrl.filter((d) => d._venc && d._dias >= 0).sort((a, b) => a._dias - b._dias).slice(0, 6);
   $('#l-proximos').innerHTML = listaProximos.length ? listaProximos.map((d) => itemCompacto(d)).join('') : '<li class="muted">Nenhum vencimento futuro cadastrado.</li>';
 
@@ -421,20 +425,21 @@ function viewPainel() {
   const anos = contar(base.filter((d) => d._atual), (d) => d._atual.getFullYear());
   const anoMin = Math.min(ref.getFullYear() - 9, ...anos.keys());
   const colsAnos = [];
-  for (let a = anoMin; a <= ref.getFullYear(); a++) colsAnos.push({ rotulo: String(a), valor: anos.get(a) || 0, ano: a });
+  for (let a = anoMin; a <= ref.getFullYear(); a++) colsAnos.push({ rotulo: String(a), rotuloCurto: `'${String(a).slice(2)}`, valor: anos.get(a) || 0, ano: a });
   colunas($('#g-anos'), colsAnos, { onClick: (c) => irPara('/documentos', { ...filtroBase, ano: c.ano, ordem: 'atualizacao' }) });
 
   // Idade da última atualização (rampa ordinal de um só tom)
   const faixas = [
-    { rotulo: '< 1 ano', max: 365, cor: 'var(--ord-1)' },
-    { rotulo: '1–2 anos', max: 730, cor: 'var(--ord-2)' },
-    { rotulo: '2–3 anos', max: 1095, cor: 'var(--ord-3)' },
-    { rotulo: '3–5 anos', max: 1826, cor: 'var(--ord-4)' },
-    { rotulo: '> 5 anos', max: Infinity, cor: 'var(--ord-5)' },
+    { rotulo: '< 1 ano', curto: '<1', max: 365, cor: 'var(--ord-1)' },
+    { rotulo: '1–2 anos', curto: '1–2', max: 730, cor: 'var(--ord-2)' },
+    { rotulo: '2–3 anos', curto: '2–3', max: 1095, cor: 'var(--ord-3)' },
+    { rotulo: '3–5 anos', curto: '3–5', max: 1826, cor: 'var(--ord-4)' },
+    { rotulo: '> 5 anos', curto: '>5', max: Infinity, cor: 'var(--ord-5)' },
   ];
   const comData = base.filter((d) => d._atual);
   const colsIdade = faixas.map((fx, i) => ({
     rotulo: fx.rotulo,
+    rotuloCurto: fx.curto,
     rotuloLongo: `Atualizados há ${fx.rotulo}`,
     cor: fx.cor,
     valor: comData.filter((d) => {
@@ -449,7 +454,7 @@ function viewPainel() {
   // Disciplinas
   const cd = contar(base, (d) => d._disc);
   const linhasDisc = [...cd.entries()]
-    .map(([rotulo, valor]) => ({ rotulo, valor }))
+    .map(([rotulo, valor]) => ({ rotulo, valor, cor: rotulo === SEM_DISCIPLINA ? 'var(--st-none)' : undefined }))
     .sort((a, b) => (a.rotulo === SEM_DISCIPLINA) - (b.rotulo === SEM_DISCIPLINA) || b.valor - a.valor);
   barrasH($('#g-disc'), linhasDisc, { onClick: (l) => irPara('/documentos', { tipo: f.tipo, disciplina: l.rotulo }) });
 
@@ -621,8 +626,8 @@ function viewVencimentos(params) {
   const futuros = base.filter((d) => d._venc && d._dias >= 0).sort((a, b) => a._dias - b._dias);
 
   const grupos = [
-    { id: 'vencidos', titulo: 'Vencidos', itens: vencidos, badge: 'Vencido', aberto: !mesAlvo },
-    { id: 'sem-data', titulo: 'Sem data de vencimento', itens: semData, badge: 'Sem data', aberto: false },
+    { id: 'vencidos', titulo: 'Vencidos', itens: vencidos, icone: ['x', 'crit'], aberto: !mesAlvo },
+    { id: 'sem-data', titulo: 'Sem data de vencimento', itens: semData, icone: ['interroga', 'none'], aberto: false },
   ];
   const porMes = new Map();
   for (const d of futuros) {
@@ -665,7 +670,7 @@ function viewVencimentos(params) {
         .map(
           (g) => `<details class="card agenda-grupo" id="${g.id}"${g.aberto ? ' open' : ''}>
             <summary>
-              <h2>${g.badge ? badgeSituacao(g.badge) : ''}${esc(g.titulo)}</h2>
+              <h2>${g.icone ? `<span class="ico-sit ${g.icone[1]}">${icone(g.icone[0])}</span>` : ''}${esc(g.titulo)}${g.badge ? badgeSituacao(g.badge) : ''}</h2>
               <span style="display:flex;align-items:center;gap:10px"><span class="contagem">${fmtNum(g.itens.length)}</span><span class="seta">${icone('seta', 'width="18" height="18"')}</span></span>
             </summary>
             ${g.itens.length ? `<ul class="lista-compacta">${g.itens.map((d) => itemCompacto(d, { mostrarLinks: true })).join('')}</ul>` : '<p class="muted" style="margin:12px 0 0">Nenhum documento vencido.</p>'}
