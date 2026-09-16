@@ -253,7 +253,17 @@ textarea.input { min-height: 84px; resize: vertical; }
 }
 .login-marca::before { width: 340px; height: 180px; right: -80px; bottom: 120px; }
 .login-marca::after { width: 220px; height: 120px; right: 120px; bottom: 40px; background: var(--rumo-verde); opacity: 0.22; }
-.login-marca img { width: 150px; height: auto; display: block; }
+.login-emblema { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 15px; color: #fff; position: relative; z-index: 1; }
+
+/* Emblema neutro (sem logotipo): módulo com chanfro em azul claro */
+.emblema {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 36px; height: 36px; background: var(--rumo-azul-claro); color: #00182C;
+  clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%);
+}
+.emblema svg { width: 20px; height: 20px; }
+.emblema-lg { width: 48px; height: 48px; clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%); }
+.emblema-lg svg { width: 26px; height: 26px; }
 .login-marca h1 { color: #fff; font-size: 32px; max-width: 16ch; }
 .login-marca p { color: #D7E9F5; max-width: 42ch; font-size: 15px; margin: 12px 0 0; }
 .login-marca small { color: #A9C6DB; position: relative; z-index: 1; }
@@ -285,13 +295,9 @@ textarea.input { min-height: 84px; resize: vertical; }
   max-width: 1320px; margin: 0 auto; padding: 0 24px;
   display: flex; align-items: center; gap: 24px; min-height: 64px;
 }
-.topo-marca { display: flex; align-items: center; gap: 14px; text-decoration: none; color: #fff; flex: none; }
-.topo-marca img { width: 96px; height: auto; display: block; }
-.topo-marca span {
-  font-size: 13px; font-weight: 700; line-height: 1.2;
-  padding-left: 14px; border-left: 1px solid rgba(255, 255, 255, 0.28);
-}
-.topo-marca span small { display: block; font-weight: 400; color: #A9C6DB; font-size: 11px; }
+.topo-marca { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; flex: none; }
+.topo-titulo { font-size: 15px; font-weight: 700; line-height: 1.2; }
+.topo-titulo small { display: block; font-weight: 400; color: #A9C6DB; font-size: 11px; }
 
 .nav { display: flex; gap: 4px; flex: 1; min-width: 0; }
 .nav a {
@@ -631,8 +637,7 @@ dialog::backdrop { background: rgba(0, 22, 40, 0.55); }
   .login-marca::before, .login-marca::after { display: none; }
 
   .topo-inner { flex-wrap: wrap; gap: 0 12px; padding: 8px 16px 0; min-height: 0; }
-  .topo-marca img { width: 84px; }
-  .topo-marca span { display: none; }
+  .topo-titulo small { display: none; }
   .topo-acoes { margin-left: auto; }
   .nav { order: 3; flex-basis: 100%; overflow-x: auto; padding: 8px 0; scrollbar-width: none; }
   .nav::-webkit-scrollbar { display: none; }

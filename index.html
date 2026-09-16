@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#003865">
   <title>Procedimentos Rumo</title>
-  <link rel="icon" href="assets/rumo/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/styles.css">
   <script>
     // Aplica o tema salvo antes de desenhar a página (evita "piscar").
@@ -25,7 +25,12 @@
   <!-- Login -->
   <main id="tela-login" class="login" hidden>
     <section class="login-marca">
-      <img src="assets/rumo/rumo-logo-branco.png" alt="Rumo" width="150" height="35">
+      <div class="login-emblema">
+        <span class="emblema emblema-lg" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M6 2h8l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 2v5h5M9 12h7M9 16h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span>Controle de Documentos</span>
+      </div>
       <div style="position:relative;z-index:1">
         <h1>Procedimentos da Via Permanente</h1>
         <p>Consulte os documentos normativos, acompanhe vencimentos e mantenha as atualizações em movimento.</p>
@@ -77,9 +82,11 @@
   <div id="tela-app" hidden>
     <header class="topo">
       <div class="topo-inner">
-        <a class="topo-marca" href="#/painel" aria-label="Início — Procedimentos Rumo">
-          <img src="assets/rumo/rumo-logo-branco.png" alt="Rumo" width="96" height="23">
-          <span>Procedimentos<small>Via Permanente · Op. Norte</small></span>
+        <a class="topo-marca" href="#/painel" aria-label="Início — Procedimentos">
+          <span class="emblema" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M6 2h8l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 2v5h5M9 12h7M9 16h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="topo-titulo">Procedimentos<small>Via Permanente · Op. Norte</small></span>
         </a>
         <nav class="nav" aria-label="Seções">
           <a href="#/painel" data-rota="/painel">Painel</a>

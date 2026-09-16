@@ -51,7 +51,7 @@ assets/js/app.js           autenticação, rotas e páginas
 assets/js/charts.js        gráficos em HTML/CSS com tooltip e tabela equivalente
 assets/js/importer.js      importação da planilha do Power BI
 assets/js/util.js          utilidades e regras dos documentos
-assets/rumo/               logos oficiais e favicon
+assets/favicon.svg         ícone da aba (emblema neutro, sem logotipo)
 supabase/migrations/       esquema do banco, RLS e gatilhos (sem dados)
 ```
 
