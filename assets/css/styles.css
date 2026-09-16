@@ -445,7 +445,7 @@ a.kpi:hover { box-shadow: var(--sombra-hover); transform: translateY(-1px); }
 .col-eixo span { font-size: 11px; color: var(--text-3); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .col-eixo .curto { display: none; }
 .col-chart { container-type: inline-size; }
-@container (max-width: 460px) {
+@container (max-width: 620px) {
   .col-eixo .longo { display: none; }
   .col-eixo .curto { display: inline; }
 }

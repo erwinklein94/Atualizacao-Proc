@@ -825,6 +825,8 @@ function renderPrevia(alvo, arquivo, lido, plano, imp) {
   const valor = (c, v) => {
     if (v == null || v === '') return '—';
     if (c === 'link_pdf' || c === 'link_editavel') return 'link';
+    if (c.startsWith('data_')) return String(v).slice(0, 10).split('-').reverse().join('/');
+    if (c === 'vigente') return v ? 'Sim' : 'Não';
     return String(v);
   };
   const exemplos = plano.alterados.slice(0, 40).map(({ alvo: a, mudancas }) => `<tr>
