@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#003865">
+  <title>Procedimentos Rumo</title>
+  <link rel="icon" href="assets/rumo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script>
+    // Aplica o tema salvo antes de desenhar a página (evita "piscar").
+    try {
+      var t = localStorage.getItem('proc-tema');
+      if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <!-- Carregamento inicial -->
+  <div id="tela-inicial" class="carregando" style="min-height:100vh">
+    <span class="spinner" aria-hidden="true"></span> Carregando…
+  </div>
+
+  <!-- Login -->
+  <main id="tela-login" class="login" hidden>
+    <section class="login-marca">
+      <img src="assets/rumo/rumo-logo-branco.png" alt="Rumo" width="150" height="35">
+      <div style="position:relative;z-index:1">
+        <h1>Procedimentos da Via Permanente</h1>
+        <p>Consulte os documentos normativos, acompanhe vencimentos e mantenha as atualizações em movimento.</p>
+      </div>
+      <small>Engenharia de Via Permanente · Operação Norte</small>
+    </section>
+
+    <section class="login-form-wrap">
+      <!-- Entrar -->
+      <form id="form-login" class="login-card" novalidate>
+        <div>
+          <h2>Entrar</h2>
+          <p class="muted">Acesso restrito a usuários autorizados.</p>
+        </div>
+        <div id="login-msg" class="alerta" hidden></div>
+        <label class="campo">
+          <span>E-mail</span>
+          <input class="input" type="email" name="email" autocomplete="username" required>
+        </label>
+        <label class="campo">
+          <span>Senha</span>
+          <input class="input" type="password" name="senha" autocomplete="current-password" required>
+        </label>
+        <button class="btn" type="submit">Entrar</button>
+        <button class="btn-link" type="button" id="btn-esqueci">Esqueci minha senha</button>
+      </form>
+
+      <!-- Definir nova senha (link de recuperação) -->
+      <form id="form-nova-senha" class="login-card" novalidate hidden>
+        <div>
+          <h2>Definir nova senha</h2>
+          <p class="muted">Escolha uma senha com pelo menos 8 caracteres.</p>
+        </div>
+        <div id="nova-senha-msg" class="alerta" hidden></div>
+        <label class="campo">
+          <span>Nova senha</span>
+          <input class="input" type="password" name="senha" autocomplete="new-password" minlength="8" required>
+        </label>
+        <label class="campo">
+          <span>Confirmar nova senha</span>
+          <input class="input" type="password" name="confirmacao" autocomplete="new-password" minlength="8" required>
+        </label>
+        <button class="btn" type="submit">Salvar senha</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Aplicação -->
+  <div id="tela-app" hidden>
+    <header class="topo">
+      <div class="topo-inner">
+        <a class="topo-marca" href="#/painel" aria-label="Início — Procedimentos Rumo">
+          <img src="assets/rumo/rumo-logo-branco.png" alt="Rumo" width="96" height="23">
+          <span>Procedimentos<small>Via Permanente · Op. Norte</small></span>
+        </a>
+        <nav class="nav" aria-label="Seções">
+          <a href="#/painel" data-rota="/painel">Painel</a>
+          <a href="#/documentos" data-rota="/documentos">Documentos</a>
+          <a href="#/vencimentos" data-rota="/vencimentos">Vencimentos</a>
+          <a href="#/gestao" data-rota="/gestao">Gestão</a>
+        </nav>
+        <div class="topo-acoes">
+          <button class="icon-btn" id="btn-tema" type="button" aria-label="Alternar tema claro/escuro"></button>
+          <div class="menu-usuario">
+            <button class="icon-btn" id="btn-usuario" type="button" aria-haspopup="true" aria-expanded="false">
+              <span class="avatar" id="avatar">?</span><span class="nome">Conta</span>
+            </button>
+            <div class="menu-pop" id="menu-usuario" hidden>
+              <div class="email" id="usuario-email"></div>
+              <button type="button" id="btn-alterar-senha">Alterar senha</button>
+              <button type="button" id="btn-recarregar">Recarregar dados</button>
+              <button type="button" id="btn-sair">Sair</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="principal" id="view" tabindex="-1"></main>
+
+    <footer class="rodape">
+      Dados armazenados no Supabase · origem: Power BI “Controle de Documentos” · <span id="rodape-info"></span>
+    </footer>
+  </div>
+
+  <dialog id="dlg"></dialog>
+  <div id="tooltip" role="tooltip" hidden></div>
+
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
